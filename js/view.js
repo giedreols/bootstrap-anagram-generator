@@ -1,6 +1,5 @@
 // view.js
 
-
 export function renderSearchPage() {
     const content = document.getElementById('content');
     content.innerHTML = `   
@@ -21,20 +20,35 @@ export function renderSearchPage() {
 }
 
 export function renderWords(data) {
-    console.log("renderWords called " + data.totalPages);
     const content = document.getElementById('content');
     let listItems = "";
-    let pageNumbers = "";
+    let pagination = "";
 
     for (const [key, value] of Object.entries(data.currentPageWords)) {
         listItems += `<a href="#${value}" class="list-group-item list-group-item-action">${value}</a>`;
     }
 
-    //if(data.totalPages < 10) {
-        for (let page = 1; page <= data.totalPages; page++) {
-            pageNumbers += `<li class="page-item"><a class="page-link" href="#${page}">${page} </a></li>`;
-        }
-    // }
+    if (data.totalPages > 1) { 
+        pagination = `
+        <nav>     
+        <ul class="pagination">
+        <li class="${data.currentPage === 1 ? "page-item disabled" : "page-item"}">
+          <a class="page-link" href="#/word-management/${data.currentPage - 1}" aria-label="Ankstesnis">
+            <span aria-hidden="true">&laquo;</span>
+            <span class="sr-only">Ankstesnis</span>
+          </a>
+        </li>
+        
+        <li class="${data.currentPage === data.totalPages ? "page-item disabled" : "page-item"}">
+          <a id="next-page-button" class="page-link" href="#/word-management/${data.currentPage + 1}" aria-label="Kitas">
+            <span class="sr-only">Kitas</span>
+            <span aria-hidden="true">&raquo;</span>
+          </a>
+        </li>
+       </ul>  
+       </nav> 
+       `;
+    }
 
     content.innerHTML = `
     <div class="card-body">
@@ -42,9 +56,7 @@ export function renderWords(data) {
         <p class="card-text">
             <div class="list-group">${listItems}</div>
         </p>
-        <nav>     
-            <ul class="pagination pagination-sm">${pageNumbers}</ul>  
-        </nav>      
+        ${pagination}
     </div>
     `;
 }

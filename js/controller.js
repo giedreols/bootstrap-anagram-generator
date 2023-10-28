@@ -8,27 +8,21 @@ import { renderWords } from './view.js';
 import { renderAbout } from './view.js';
 import { renderSearchPage } from './view.js';
 
+const baseApi = "http://localhost:5254";
 
 function renderControllerContent(route) {
+    console.log("renderControllerContent called");
     const content = document.getElementById('content');
-    switch (route) {
-        case '#/search':
-            renderSearchPage();
-            break;
-        case '#/word-management':
-            fetchWords("http://localhost:5254/WordApi/IndexAsyncApi", handleData);
-            console.log("fetchWords called and returned data into controller");
-            
-            //renderWords(xxx);
 
-                // xxx.then((data) => {
-                //     renderWords(data);
-                // })
-                // .catch((error) => {
-                //     console.error(error);
-                // });
-            break;
-        case '#/about':
+    if(route == '#/search') renderSearchPage();
+
+    else if (route.startsWith('#/word-management')) 
+    {
+        const page = parseInt(route.substring(route.lastIndexOf('/') + 1), 10);
+        fetchWords(`${baseApi}/WordApi/IndexAsyncApi?page=${page}`, handleWordList);
+    }
+
+    else if (route == '#/about') {
             fetchAbout()
                 .then((data) => {
                     renderAbout(data);
@@ -36,14 +30,12 @@ function renderControllerContent(route) {
                 .catch((error) => {
                     console.error(error);
                 });
-            break;
-        default:
-            content.innerHTML = "<p>Puslapis nerastas</p>";
+            }
+    else content.innerHTML = "<p>Puslapis nerastas</p>";
     }
-}
 
-function handleData(data) {
-    console.log("handleData called " + data.totalPages);
+function handleWordList(data) {
+    console.log(data);
     renderWords(data);
 }
 
@@ -53,23 +45,58 @@ window.addEventListener('hashchange', () => {
 
 renderControllerContent(window.location.hash);
 
-document.getElementById("search-button").addEventListener("click", function() {
-    var searchValue = document.getElementById("search-input").value;
-    var apiUrl = "http://localhost:5254/WordApi/GetAsyncApi?inputWord=" + searchValue;
+//document.querySelector
+// WORD LIST PAGINATION 
 
-    fetchAnagrams(apiUrl, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(jsonData),
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log(data);
-        // Handle the response from the controller here.
-    })
-    .catch(error => {
-        console.error('Error:', error);
-    });
-});
+// document.getElementById('next-page-button').addEventListener('click', function(event) {
+//     console.log("event listener called");
+//     event.preventDefault();
+//     const currentPage = parseInt(this.getAttribute('href').split('/').pop());
+//     console.log("currentPage: " + currentPage);
+//     handlePagination(currentPage);
+//   });
+
+
+
+function handlePagination(page) {  
+    console.log(`HandlePagination called ${page}`);
+
+    // const newUrl = `#/word-management/${page}`;
+    // history.pushState({ page }, null, newUrl);
+
+    fetchWords(`${baseApi}/WordApi/IndexAsyncApi/?page=${page}`, handleWordList);
+};
+
+// Function to handle popstate events (e.g., when the user uses the browser's back/forward buttons)
+window.onpopstate = function(event) {
+    if (event.state) {
+      const page = event.state.page;
+      fetchWords(`${baseApi}/WordApi/IndexAsyncApi/?page=${page}`, handleWordList);
+    }
+  };
+
+  
+ 
+// SEARCH
+
+// document.getElementById("search-button").addEventListener("click", function() {
+//     var searchValue = document.getElementById("search-input").value;
+//     var apiUrl = `${baseApi}/WordApi/GetAsyncApi?inputWord=${searchValue}`;
+
+//     fetchAnagrams(apiUrl, {
+//         method: 'POST',
+//         headers: {
+//             'Content-Type': 'application/json',
+//         },
+//         body: JSON.stringify(jsonData),
+//     })
+//     .then(response => response.json())
+//     .then(data => {
+//         console.log(data);
+//         // Handle the response from the controller here.
+//     })
+//     .catch(error => {
+//         console.error('Error:', error);
+//     });
+// });
+
