@@ -40,7 +40,7 @@ export function renderWords(data) {
         </li>
         
         <li class="${data.currentPage === data.totalPages ? "page-item disabled" : "page-item"}">
-          <a id="next-page-button" class="page-link" href="#/word-management/${data.currentPage + 1}" aria-label="Kitas">
+          <a class="page-link" href="#/word-management/${data.currentPage + 1}" aria-label="Kitas">
             <span class="sr-only">Kitas</span>
             <span aria-hidden="true">&raquo;</span>
           </a>

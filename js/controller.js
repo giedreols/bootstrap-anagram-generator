@@ -10,72 +10,38 @@ import { renderSearchPage } from './view.js';
 
 const baseApi = "http://localhost:5254";
 
-function renderControllerContent(route) {
-    console.log("renderControllerContent called");
-    const content = document.getElementById('content');
-
-    if(route == '#/search') renderSearchPage();
-
-    else if (route.startsWith('#/word-management')) 
-    {
-        const page = parseInt(route.substring(route.lastIndexOf('/') + 1), 10);
-        fetchWords(`${baseApi}/WordApi/IndexAsyncApi?page=${page}`, handleWordList);
-    }
-
-    else if (route == '#/about') {
-            fetchAbout()
-                .then((data) => {
-                    renderAbout(data);
-                })
-                .catch((error) => {
-                    console.error(error);
-                });
-            }
-    else content.innerHTML = "<p>Puslapis nerastas</p>";
-    }
-
-function handleWordList(data) {
-    console.log(data);
-    renderWords(data);
-}
-
 window.addEventListener('hashchange', () => {
     renderControllerContent(window.location.hash);
 });
 
 renderControllerContent(window.location.hash);
 
-//document.querySelector
-// WORD LIST PAGINATION 
+// ROUTE
 
-// document.getElementById('next-page-button').addEventListener('click', function(event) {
-//     console.log("event listener called");
-//     event.preventDefault();
-//     const currentPage = parseInt(this.getAttribute('href').split('/').pop());
-//     console.log("currentPage: " + currentPage);
-//     handlePagination(currentPage);
-//   });
+function renderControllerContent(route) {
+   const content = document.getElementById('content');
 
+   if(route == '' || route == '#/search') renderSearchPage();
 
+   else if (route.startsWith('#/word-management')) 
+   {
+        const page = parseInt(route.substring(route.lastIndexOf('/') + 1), 10);
+        fetchWords(`${baseApi}/WordApi/IndexAsyncApi?page=${page}`, handleWordList);
+   }
 
-function handlePagination(page) {  
-    console.log(`HandlePagination called ${page}`);
+    else if (route == '#/about') {
+            fetchAbout()
+                .then((data) => {
+                    renderAbout(data);
+                })
+            }
 
-    // const newUrl = `#/word-management/${page}`;
-    // history.pushState({ page }, null, newUrl);
+    else content.innerHTML = "<p>Puslapis nerastas</p>";
+}
 
-    fetchWords(`${baseApi}/WordApi/IndexAsyncApi/?page=${page}`, handleWordList);
-};
-
-// Function to handle popstate events (e.g., when the user uses the browser's back/forward buttons)
-window.onpopstate = function(event) {
-    if (event.state) {
-      const page = event.state.page;
-      fetchWords(`${baseApi}/WordApi/IndexAsyncApi/?page=${page}`, handleWordList);
-    }
-  };
-
-  
+function handleWordList(data) {
+    renderWords(data);
+}
  
 // SEARCH
 
