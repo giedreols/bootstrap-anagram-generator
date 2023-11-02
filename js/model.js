@@ -23,10 +23,7 @@ export function fetchAnagrams(apiUrl, callback) {
     req.open('GET', apiUrl, true);
     req.onload  = function() {
        var jsonResponse = req.response;
-
-       return new Promise((resolve, reject) => {       
-        resolve(jsonResponse);         
-        });
+       callback(jsonResponse);
     };
     req.send(null);
 }

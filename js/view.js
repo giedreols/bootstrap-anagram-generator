@@ -19,13 +19,43 @@ export function renderSearchPage() {
   `;
 }
 
-export function renderWords(data) {
+export function renderAnagramsInWordListPage(data) {
+  const content = document.getElementById(data.wordId);
+  let title = "";
+  let listItems = "";
+
+  if(data.anagrams.length === 0) {
+    title = `Nėra anagramų`;
+  }
+
+  else {
+    title = `Anagramos:`;
+  data.anagrams.forEach(anagram => {
+    listItems += `<a href="#${anagram}" class="list-group-item list-group-item-action">${anagram}</a>`;
+  }); }
+  
+  content.innerHTML = `
+          <div class="card-body">
+            <div class="italic">${title}</div>
+            ${listItems}
+          </div>
+  `;
+}
+
+export function renderWordListPage(data) {
     const content = document.getElementById('content');
     let listItems = "";
     let pagination = "";
 
     for (const [key, value] of Object.entries(data.currentPageWords)) {
-        listItems += `<a href="#${value}" class="list-group-item list-group-item-action">${value}</a>`;
+      listItems += `
+        <div class="card-header" id="${value}">
+          <a class="list-group-item list-group-item-action" data-bs-toggle="collapse" href="#${key}">
+            ${value}
+          </a>
+        </div>
+        <div id="${key}" class="collapse" data-bs-parent="#accordion"> </div>
+      `;
     }
 
     if (data.totalPages > 1) { 
@@ -53,15 +83,17 @@ export function renderWords(data) {
     content.innerHTML = `
     <div class="card-body">
         <h5 class="card-title">Žodžių sąrašas</h5>
-        <p class="card-text">
-            <div class="list-group">${listItems}</div>
-        </p>
+        <div id="accordion">
+          <div class="card">
+            ${listItems}
+          </div>
+        </div>
         ${pagination}
     </div>
     `;
 }
 
-export function renderAbout(data) {
+export function renderAboutPage(data) {
     const content = document.getElementById('content');
     content.innerHTML = `   
   <div class="card-body">

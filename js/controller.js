@@ -4,9 +4,10 @@
 import { fetchWords } from './model.js';
 import { fetchAbout } from './model.js';
 import { fetchAnagrams } from './model.js';
-import { renderWords } from './view.js';
-import { renderAbout } from './view.js';
+import { renderWordListPage } from './view.js';
+import { renderAboutPage } from './view.js';
 import { renderSearchPage } from './view.js';
+import { renderAnagramsInWordListPage } from './view.js';
 
 const baseApi = "http://localhost:5254";
 
@@ -32,7 +33,7 @@ function renderControllerContent(route) {
     else if (route == '#/about') {
             fetchAbout()
                 .then((data) => {
-                    renderAbout(data);
+                    renderAboutPage(data);
                 })
             }
 
@@ -40,8 +41,22 @@ function renderControllerContent(route) {
 }
 
 function handleWordList(data) {
-    renderWords(data);
+    renderWordListPage(data);
 }
+
+// ANAGRAMS IN WORD LIST
+
+function handleAnagrams(data) {
+  renderAnagramsInWordListPage(data);
+}
+
+document.addEventListener('click', function (event) {
+    const cardHeader = event.target.closest('.card-header');
+    if (cardHeader) {
+      const word = cardHeader.getAttribute('id');
+      fetchAnagrams(`${baseApi}/WordApi/GetAsyncApi?inputword=${word}`, handleAnagrams);
+    }
+  });
  
 // SEARCH
 

@@ -8,3 +8,11 @@
     justify-content: center;
     align-items: center;
 }
+
+.capitalize {
+    text-transform: capitalize;
+}
+
+.italic {
+    font-style: italic;
+}
