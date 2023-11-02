@@ -8,6 +8,7 @@ import { renderWordListPage } from './view.js';
 import { renderAboutPage } from './view.js';
 import { renderSearchPage } from './view.js';
 import { renderAnagramsInWordListPage } from './view.js';
+import { renderAnagramsInSearchPage } from './view.js';
 
 const baseApi = "http://localhost:5254";
 
@@ -46,7 +47,7 @@ function handleWordList(data) {
 
 // ANAGRAMS IN WORD LIST
 
-function handleAnagrams(data) {
+function handleAnagramsInWordList(data) {
   renderAnagramsInWordListPage(data);
 }
 
@@ -54,30 +55,18 @@ document.addEventListener('click', function (event) {
     const cardHeader = event.target.closest('.card-header');
     if (cardHeader) {
       const word = cardHeader.getAttribute('id');
-      fetchAnagrams(`${baseApi}/WordApi/GetAsyncApi?inputword=${word}`, handleAnagrams);
+      fetchAnagrams(`${baseApi}/WordApi/GetAsyncApi?inputword=${word}`, handleAnagramsInWordList);
     }
   });
  
 // SEARCH
 
-// document.getElementById("search-button").addEventListener("click", function() {
-//     var searchValue = document.getElementById("search-input").value;
-//     var apiUrl = `${baseApi}/WordApi/GetAsyncApi?inputWord=${searchValue}`;
+function handleAnagramsInSearch(data) {
+  renderAnagramsInSearchPage(data);
+}
 
-//     fetchAnagrams(apiUrl, {
-//         method: 'POST',
-//         headers: {
-//             'Content-Type': 'application/json',
-//         },
-//         body: JSON.stringify(jsonData),
-//     })
-//     .then(response => response.json())
-//     .then(data => {
-//         console.log(data);
-//         // Handle the response from the controller here.
-//     })
-//     .catch(error => {
-//         console.error('Error:', error);
-//     });
-// });
+document.getElementById("search-button").addEventListener("click", function() {
+    var word = document.getElementById("search-input").value;
+    fetchAnagrams(`${baseApi}/WordApi/GetAsyncApi?inputword=${word}`, handleAnagramsInSearch);
+});
 

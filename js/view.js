@@ -14,10 +14,34 @@ export function renderSearchPage() {
                 </div>
             </div>
         </div>
+        <div id="anagrams"> </div>
     </p>
   </div>  
   `;
 }
+
+
+export function renderAnagramsInSearchPage(data) {
+     const content = document.getElementById("anagrams");
+     let title = "";
+     let listItems = "";
+  
+     if(data.anagrams.length === 0) {
+       title = `<div class="italic">Nėra anagramų</div>`;
+     }
+  
+     else {
+      title = `Anagramos:`;
+       data.anagrams.forEach(anagram => {
+       listItems += `<a class="list-group-item list-group-item-action">${anagram}</a>`;
+     }); }
+    
+     content.innerHTML = `
+             <div class="card-body">
+               <div>${title}</div>
+               ${listItems}
+             </div>`
+  }
 
 export function renderAnagramsInWordListPage(data) {
   const content = document.getElementById(data.wordId);
@@ -25,18 +49,18 @@ export function renderAnagramsInWordListPage(data) {
   let listItems = "";
 
   if(data.anagrams.length === 0) {
-    title = `Nėra anagramų`;
+    title = `<div class="italic">Nėra anagramų</div>`;
   }
-
   else {
     title = `Anagramos:`;
-  data.anagrams.forEach(anagram => {
-    listItems += `<a href="#${anagram}" class="list-group-item list-group-item-action">${anagram}</a>`;
-  }); }
+    data.anagrams.forEach(anagram => {
+    listItems += `<a class="list-group-item list-group-item-action">${anagram}</a>`;
+  });
+  }
   
   content.innerHTML = `
           <div class="card-body">
-            <div class="italic">${title}</div>
+            <div>${title}</div>
             ${listItems}
           </div>
   `;
