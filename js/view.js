@@ -20,7 +20,6 @@ export function renderSearchPage() {
   `;
 }
 
-
 export function renderAnagramsInSearchPage(data) {
      const content = document.getElementById("anagrams");
      let title = "";
@@ -41,7 +40,24 @@ export function renderAnagramsInSearchPage(data) {
                <div>${title}</div>
                ${listItems}
              </div>`
-  }
+  }  
+
+export function renderWordEditingForm() {
+  const currentWord = document.querySelector('.collapse.show').previousElementSibling.id;
+  const content = document.querySelector('.collapse.show .card-body');
+
+  content.innerHTML = `   
+  <form class="needs-validation" novalidate>
+    <div class="form-group">
+      <label class="form-label">Nauja žodžio forma:</label>
+      <input type="text" class="form-control" id="edited-word" value=${currentWord} maxlength="10" required>
+      <div class="invalid-feedback" id="validation-error"></div>
+    </div>
+    <button my-tag="reject-btn" type="button" class="btn btn-outline-danger btn-sm">Atmesti</button>
+    <button my-tag="save-btn" type="submit" class="btn btn-outline-primary btn-sm disabled">Išsaugoti</button>
+  </form>
+`;
+}
 
 export function renderAnagramsInWordListPage(data) {
   const content = document.getElementById(data.wordId);
@@ -60,8 +76,12 @@ export function renderAnagramsInWordListPage(data) {
   
   content.innerHTML = `
           <div class="card-body">
-            <div>${title}</div>
-            ${listItems}
+              <button my-tag="edit-btn" type="button" class="btn btn-outline-success btn-sm">Keisti</button>
+              <button my-tag="delete-btn" type="button" class="btn btn-outline-danger btn-sm">Trinti</button>
+          <div class="card-body">
+              <div>${title}</div>
+              ${listItems}
+            </div>
           </div>
   `;
 }
