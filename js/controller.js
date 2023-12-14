@@ -83,7 +83,7 @@ function addEventListenerForWordEditingAccordeon() {
         var editedWordInput = document.getElementById('edited-word');
         if (editedWordInput) {
             editedWordInput.addEventListener('input', function () { 
-              validateEditedWord();
+              validateEditingWord();
               addEventListenerForWordSaving();
               addEventListenerForWordRejecting();
             });
@@ -105,7 +105,7 @@ function addEventListenerForWordEditingAccordeon() {
 
 // WORD EDITING   
 
-function validateEditedWord() {
+function validateEditingWord() {
   var wordInput = document.getElementById('edited-word');
   var newWord = wordInput.value;
   var validationError = document.getElementById('validation-error');
@@ -176,6 +176,25 @@ function handleAnagramsInSearch(data) {
 
 function addEventListenerForSearchPage() {
   const searchBtn = document.getElementById("search-button");
+  const searchField = document.getElementById("search-input");
+
+  if(searchField) {
+    searchField.addEventListener("input", function() {
+
+      if (!(/^[a-zA-Z]+$/.test(searchField.value))) {
+        searchField.value = searchField.value.replace(/[^a-zA-Z]/g, '');
+      }
+
+      if (searchField.value.length < 1) {
+        searchBtn.classList.add("disabled");
+      } 
+      else {
+        searchBtn.classList.remove("disabled");
+      };
+    })
+  }
+
+
   if (searchBtn) {
       searchBtn.addEventListener("click", function() {
       var word = document.getElementById("search-input").value;

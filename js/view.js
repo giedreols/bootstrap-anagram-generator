@@ -10,7 +10,7 @@ export function renderSearchPage() {
             <div class="input-group mb-3 d-flex justify-content-center">
                 <input type="search" id="search-input" class="form-control" placeholder="siela..." aria-label="paieška" aria-describedby="basic-addon2" maxlength="10" size="10">
                 <div class="input-group-append">
-                    <button class="btn btn-outline-success" type="button" id="search-button">Ieškok!</button>
+                    <button class="btn btn-outline-success disabled" type="button" id="search-button">Ieškok!</button>
                 </div>
             </div>
         </div>
@@ -24,15 +24,20 @@ export function renderAnagramsInSearchPage(data) {
      const content = document.getElementById("anagrams");
      let title = "";
      let listItems = "";
+
+     if(data.errorMessages.length > 0) {
+      content.innerHTML = `Kažkokia laida, soriukas`;
+      return;
+     }
   
-     if(data.anagrams.length === 0) {
+     if(data.wordAndAnagrams.anagrams?.length === 0) {
        title = `<div class="italic">Nėra anagramų</div>`;
      }
   
      else {
-      title = `Anagramos:`;
-       data.anagrams.forEach(anagram => {
-       listItems += `<a class="list-group-item list-group-item-action">${anagram}</a>`;
+        title = `Anagramos:`;
+        data.wordAndAnagrams.anagrams?.forEach(anagram => {
+        listItems += `<a class="list-group-item list-group-item-action">${anagram}</a>`;
      }); }
     
      content.innerHTML = `
@@ -60,16 +65,16 @@ export function renderWordEditingForm() {
 }
 
 export function renderAnagramsInWordListPage(data) {
-  const content = document.getElementById(data.wordId);
+  const content = document.getElementById(data.wordAndAnagrams.wordId);
   let title = "";
   let listItems = "";
 
-  if(data.anagrams.length === 0) {
+  if(data.wordAndAnagrams.anagrams?.length === 0) {
     title = `<div class="italic">Nėra anagramų</div>`;
   }
   else {
     title = `Anagramos:`;
-    data.anagrams.forEach(anagram => {
+    data.wordAndAnagrams.anagrams?.forEach(anagram => {
     listItems += `<a class="list-group-item list-group-item-action">${anagram}</a>`;
   });
   }
@@ -91,7 +96,10 @@ export function renderWordListPage(data) {
     let listItems = "";
     let pagination = "";
 
-    for (const [key, value] of Object.entries(data.currentPageWords)) {
+    const keyValueArray = Object.entries(data.currentPageWords).map(([key, value]) => ({ key, value }));
+    const sortedArray = keyValueArray.sort((a, b) => a.value.localeCompare(b.value));
+
+    for (const {key, value } of sortedArray) {
       listItems += `
         <div class="card-header" id="${value}">
           <a class="list-group-item list-group-item-action" data-bs-toggle="collapse" href="#${key}">
