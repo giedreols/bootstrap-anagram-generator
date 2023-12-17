@@ -14,7 +14,7 @@ import { renderAnagramsInSearchPage } from './view.js';
 import { renderWordEditingForm } from './view.js';
 
 
-const baseApi = "http://localhost:5254";
+const baseApi = "https://localhost:7242";
 
 window.addEventListener('hashchange', () => {
     renderControllerContent(window.location.hash);
