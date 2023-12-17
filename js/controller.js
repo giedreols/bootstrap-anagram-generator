@@ -14,7 +14,7 @@ import { renderAnagramsInSearchPage } from './view.js';
 import { renderWordEditingForm } from './view.js';
 
 
-const baseApi = "https://localhost:7242";
+const baseApi = "https://localhost:7186";
 
 window.addEventListener('hashchange', () => {
     renderControllerContent(window.location.hash);
@@ -113,9 +113,10 @@ function validateEditingWord() {
 
   validationError.innerHTML = '';
 
-  if (!(/^[a-zA-Z]+$/.test(newWord))) {
-    wordInput.value = newWord.replace(/[^a-zA-Z]/g, '');
+  if (!(/^[a-zA-ZĄČĘĖĮŠŲŪŽąčęėįšųūž]+$/.test(newWord))) {
+    wordInput.value = newWord.replace(/[^a-zA-ZĄČĘĖĮŠŲŪŽąčęėįšųūž]/g, '');
   }
+
   
   if (newWord.trim().length < 3) {
     addValidationError(wordInput, validationError, 'Įveskite bent 3 raides');
@@ -181,8 +182,8 @@ function addEventListenerForSearchPage() {
   if(searchField) {
     searchField.addEventListener("input", function() {
 
-      if (!(/^[a-zA-Z]+$/.test(searchField.value))) {
-        searchField.value = searchField.value.replace(/[^a-zA-Z]/g, '');
+      if (!(/^[a-zA-ZĄČĘĖĮŠŲŪŽąčęėįšųūž]+$/.test(searchField.value))) {
+        searchField.value = searchField.value.replace(/[^a-zA-ZĄČĘĖĮŠŲŪŽąčęėįšųūž]/g, '');
       }
 
       if (searchField.value.length < 1) {
